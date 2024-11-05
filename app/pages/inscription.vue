@@ -8,18 +8,24 @@ const form = ref({
   password: '',
   adress: '',
 })
-// const { data, error, execute } = useFetch('http://127.0.0.1:8000/api/inscription', {
-//   immediate: false,
-//   watch: false,
-//   method: 'POST',
-//   body: form.value,
 
-//   mode: 'cors',
-// })
+const success = ref('')
+const error = ref('')
+
 async function handleFormSubmit() {
+  success.value = ''
+  error.value = ''
+
+  if (!form.value.name || !form.value.lastname || !form.value.email || !form.value.password) {
+    return error.value = 'Veuillez remplir tous les champs obligatoires.'
+  }
+
   await $fetch('http://127.0.0.1:8000/api/inscription', {
     method: 'POST',
     body: form.value,
+    headers: {
+      Accept: 'application/json',
+    },
   })
 }
 </script>
@@ -28,16 +34,13 @@ async function handleFormSubmit() {
   <div>
     <h1>Créer votre compte</h1>
     <p>Vous avez déjà un compte ? Connectez-vous !</p>
-    <!-- <div v-if="data" class="alert alert-success">
-      {{ data }}
-    </div> -->
 
-    <!-- Affichage des messages de succès ou d'erreur -->
-    <!-- <div v-if="error" class="alert alert-danger">
-      <p>
-        {{ error }}
-      </p>
-    </div> -->
+    <div v-if="success">
+      {{ success }}
+    </div>
+    <div v-if="error">
+      {{ error }}
+    </div>
 
     <form>
       <div>

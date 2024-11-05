@@ -5,16 +5,13 @@ const form = ref({
 })
 
 async function handleFormSubmit() {
-  const response = await $fetch('http://127.0.0.1:8000/api/connexion', {
+  await $fetch('http://127.0.0.1:8000/api/connexion', {
     method: 'POST',
     body: form.value,
+    headers: {
+      Accept: 'application/json',
+    },
   })
-
-  if (response) {
-    console.log(response)
-  }
-
-  console.log('Connexion réussie')
 }
 </script>
 
