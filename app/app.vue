@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { appName } from '~/constants'
 
+const { showSnackbar, snackbarText, snackbarColor } = useSnackbarStore()
+
 useHead({
   title: appName,
 })
@@ -9,21 +11,16 @@ useHead({
 <template>
   <VitePwaManifest />
   <NuxtLayout>
-    <NuxtPage />
+    <v-app>
+      <NuxtPage />
+      <v-snackbar
+        v-model="showSnackbar"
+        :timeout="3000"
+        :color="snackbarColor"
+        multi-line
+      >
+        {{ snackbarText }}
+      </v-snackbar>
+    </v-app>
   </NuxtLayout>
 </template>
-
-<style>
-html,
-body,
-#__nuxt {
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-html.dark {
-  background: #222;
-  color: white;
-}
-</style>

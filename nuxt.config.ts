@@ -1,3 +1,4 @@
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
 
@@ -9,6 +10,12 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error plugin is not undefined
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    },
   ],
 
   devtools: {
@@ -41,6 +48,10 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 
+  build: {
+    transpile: ['vuetify'],
+  },
+
   future: {
     compatibilityVersion: 4,
   },
@@ -65,6 +76,14 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ['/'],
       ignore: ['/hi'],
+    },
+  },
+
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
     },
   },
 
