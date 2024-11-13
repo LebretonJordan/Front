@@ -17,7 +17,6 @@ const form: Ref<Form> = ref({
 })
 
 const { validate, getErrorMessage, isValid } = useFormValidation(schema, form)
-// const { setSnackbarText } = useSnackbarStore()
 const router = useRouter()
 
 async function handleFormSubmit() {
@@ -35,11 +34,9 @@ async function handleFormSubmit() {
       },
     })
 
-    console.log(response)
-
     if (response.token) {
-      localStorage.setItem('auth_token', response.token)
-
+      // Token en session et non en local
+      sessionStorage.setItem('auth_token', response.token)
       router.push({ name: 'accueil' })
     }
     else {
