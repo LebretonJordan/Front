@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/composables/auth'
 import { useFormValidation } from 'vue-use-form-validation'
 import { z } from 'zod'
 
@@ -7,9 +7,7 @@ const schema = z.object({
   email: z.string(),
   password: z.string(),
 })
-
-const backendError = ref()
-
+const { login, error } = useAuthStore()
 type Form = z.infer<typeof schema>
 const form: Ref<Form> = ref({
   email: '',
@@ -17,35 +15,12 @@ const form: Ref<Form> = ref({
 })
 
 const { validate, getErrorMessage, isValid } = useFormValidation(schema, form)
-const router = useRouter()
-
 async function handleFormSubmit() {
   await validate()
   if (!isValid.value) {
     return
   }
-
-  try {
-    const response = await $fetch<{ token?: string, error?: string }>('http://127.0.0.1:8000/api/connexion', {
-      method: 'POST',
-      body: form.value,
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-
-    if (response.token) {
-      // Token en session et non en local
-      sessionStorage.setItem('auth_token', response.token)
-      router.push({ name: 'accueil' })
-    }
-    else {
-      backendError.value = response.error || 'Une erreur est survenue lors de la connexion'
-    }
-  }
-  catch {
-    backendError.value = 'Erreur lors de la connexion au serveur. Veuillez réessayer.'
-  }
+  login(form.value)
 }
 </script>
 
@@ -55,8 +30,8 @@ async function handleFormSubmit() {
       Connexion
     </h1>
 
-    <v-alert v-if="backendError" type="error" variant="outlined" class="mb-4">
-      <p>{{ backendError }}</p>
+    <v-alert v-if="error" type="error" variant="outlined" class="mb-4">
+      <p>{{ error }}</p>
     </v-alert>
 
     <v-form class="mb-3 flex flex-col gap-3">
