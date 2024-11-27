@@ -49,7 +49,7 @@ async function handleFormSubmit() {
   }
 
   try {
-    await $fetch('http://127.0.0.1:8000/api/inscription', {
+    await $fetch('http://127.0.0.1:8000/api/registration', {
       method: 'POST',
       body: form.value,
       headers: { Accept: 'application/json' },

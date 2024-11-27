@@ -44,7 +44,7 @@ async function handleFormSubmit() {
 
     <p class="text-body-1">
       Si vous n'avez pas de compte,
-      <v-btn variant="plain" slim to="/inscription">
+      <v-btn variant="plain" slim to="/registration">
         inscrivez-vous ici
       </v-btn>.
     </p>
